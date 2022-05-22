@@ -1,0 +1,43 @@
+server:
+  port: 8081
+  servlet:
+    context-path: /realocacao-squad
+  error:
+    include-message: always
+    include-exception: false
+    include-stacktrace: on_param
+    include-binding-errors: always
+
+spring:
+  output:
+    ansi:
+      enabled: ALWAYS
+  ##
+  # Spring Security OAuth2 Client
+  ##
+  security:
+    oauth2:
+      client:
+        provider:
+          gestao-funcionarios:
+            token-uri: http://localhost:18080/auth/realms/gestao-funcionarios/protocol/openid-connect/token
+        registration:
+          gestao-funcionarios:
+            authorization-grant-type: client_credentials
+            client-id: realocacao-squad-client
+            client-secret: pT23VzSBgqFx2HiqHCmLRCulnwJvPYCy
+            scope: funcionarios:read
+
+##
+# Open Feign
+##
+integrations.resource-server.url: http://localhost:8080/oauth2-resourceserver-gestao-funcionarios/
+
+feign:
+  client:
+    config:
+      funcionariosClient:
+        decode404: true
+        loggerLevel: full
+
+logging.level.br.com.zup.edu.realocacaosquad.client.FuncionariosClient: DEBUG
